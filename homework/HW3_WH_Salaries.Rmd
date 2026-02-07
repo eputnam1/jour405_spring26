@@ -9,6 +9,8 @@ In this assignment, we will be working with a dataset containing information abo
 You will need to load the tidyverse library
 
 ```{r}
+library(tidyverse)
+
 ```
 
 Then you'll load the data from the web. The URL for the data is: https://raw.githubusercontent.com/dwillis/jour405/refs/heads/main/data/white_house_salaries_2025.csv. You will create a dataframe called `wh_salaries` that contains the data from this URL.
@@ -16,6 +18,7 @@ Then you'll load the data from the web. The URL for the data is: https://raw.git
 ### Task 2: Load the Data and Describe It
 
 ```{r}
+w_salaries <- read_csv("https://raw.githubusercontent.com/dwillis/jour405/refs/heads/main/data/white_house_salaries_2025.csv")
 ```
 ### Task 3: Describe the Data
 
@@ -23,20 +26,28 @@ You should examine that dataframe carefully by clicking on it in the Environment
 
 ANSWER HERE
 
+The data categorizes the yearly salaries of White House staff. The payrolls listed are for a mix of employees and detailees serving temporary roles. There is a large range of salaries, with advisor Jacalynne Klopp being the highest paid at $225,700 per annum and others, including Marco Rubio, working for free. Those like Rubio that work for free may complicate data anlysis because their payroll does not accurately correspond to the importance of their role in the administration. However, it does appear for the most part that higher payroll corresponds with job importance, with important advisors in the spheres of homeland security and the Ukraine-Russia conflict near the top.
+
 ### Task 4: Calculate the Mean and Median of the Salaries
 
 Write code to calculate the mean and median of the salaries in the dataset using the `summarize()` function. You don't need to make a new dataframe, just display the results.
 
 ```{r}
-
+summarize(mean(w_salaries))
 ```
+```{r}
+w_salaries |> summarize(mean(SALARY))
+w_salaries |> summarize(median(SALARY))
+```
+
 
 ### Task 5: Add in the minimum and maximum salaries
 
 Take the code you just wrote and add in the minimum and maximum salaries (the functions for that are `min()` and `max()`). Your results should show four columns: mean_salary, median_salary, min_salary, max_salary.
 
 ```{r}
-
+w_salaries |> summarize(min(SALARY))
+w_salaries |> summarize(max(SALARY))
 ```
 
 ### Task 6: Describe the Results
@@ -45,8 +56,12 @@ Write a couple of sentences describing the results of your analysis. What do the
 
 ANSWER HERE
 
+Looking at the results of these calculations, we can determine via the mean and median that the payrolls are fairly evenly distributed, as both the mean and median are very similar, the mean being 109117.4 and the median being 101500. The minimum and the maximum show that most notably, there are outlying salaries on the lower end of the spectrum, with several members of the staff working without pay, making the minimum zero while the maximum sits at 225700. This confirms the previous observation that the data may be disrupted by members of the staff like Marco Rubio that do not take pay for their job.
+
 ### Task 7: Story Idea
 
 Based on the data, what is your best story idea? What is the next step you would take to develop that story idea?
 
 ANSWER HERE
+
+One story idea that would be worth pursuing would be finding out why those who are not receiving a salary aren't. For most, it is likely that they will say that they are doing it as an act of service to the country, but it would be worthwhile to do a piece breaking down who is not being paid, what their job is, and why they are not taking pay. To go about this, I would probably read about any potential historical precedents when it comes to pay in these roles, and then reach out to government authorities to ask what these jobs consist of and why these people are not receiving pay, that is if the people themselves or their spokespeople are not accessible first.
