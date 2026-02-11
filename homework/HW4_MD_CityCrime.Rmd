@@ -62,3 +62,17 @@ Throughout much of Maryland, crime decreased in 2020. Baltimore City had Marylan
 ### Task 9: Save Your Work and Put it on GitHub
 
 Save this notebook, then commit it to your local repository. Push the changes to your GitHub repository and submit the URL for this file in ELMS.
+
+### Task 10: Percentiles (HW 5)
+
+```{r}
+md_cities_percentiles = md_cities_change |> mutate(percentile = ntile(violent_rate_2020, 100))
+```
+
+There are 10 cities above 90th percentile.
+
+```{r}
+md_cities_percentiles |> summarize(iqr_2020 = IQR(violent_rate_2020))
+```
+The results reinforce my story idea. By generating the percentiles, the data showed that Ocean City's violent crime rate was in the 100th percentile in 2020, which is definitely alarming. Additionally, the IQR revealed that the spread between the first and third quartiles is just under 30 per 5,000 people, whereas the 2020 violent crime rate for Ocean City was 119.8: a major outlier. Generating this additional data helped to confirm that Ocean City's rise in crime is absolutely newsworthy.
+
