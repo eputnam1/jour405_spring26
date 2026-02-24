@@ -1,6 +1,6 @@
 ---
 title: "Baltimore County 911 Overdose Calls Analysis"
-author: "YOUR NAME HERE"
+author: "Ethan Putnam"
 ---
 
 ```{r setup, include=FALSE}
@@ -74,7 +74,7 @@ summary(daily_calls$call_count)
 
 Let's visualize the time series of daily calls. What patterns do you see? If you had to draw horizontal lines that would highlight unusual days, where would those lines be?
 
-ANSWER HERE
+The pattern is generally constant, hovering around 10 calls per day. There is a noticeable incline in the early summer months of 2022. There was also a decline from October onward into January 2023. There waas an unusually low number in June 2022, and unusually high points in July, October, and late December into early January 2023.
 
 ```{r daily-calls-plot}
 # Plot daily call volume
@@ -137,7 +137,7 @@ unusual_days |>
 
 Let's visualize these unusual days in the context of the full dataset. How do they differ from your answer on Task 3?
 
-ANSWER HERE
+This visualization shows that there are more unusually high days than unusually low days in the summer months, and more unusually low days transitioning into the winter months. In the previous answer, I had the same data, but this visualization better demonstrated where the data shows the largest outliers and where the story in the data is, rather than just the blatant outliers that are immediately apparent.
 
 ```{r plot-unusual-days}
 # Create a clean factor for the plot legend
@@ -207,7 +207,7 @@ ggplot(dow_summary, aes(x = day_of_week, y = avg_calls)) +
 
 We can also calculate z-scores that account for the day of the week pattern. How would you describe the day with the highest z-score without using the term "z-score"?
 
-ANSWER HERE
+To avoid referencing "z-scores," you need to put that finding into the context of the story. One way to do that would be referencing what percentile an outlier falls into in the wider dataset, which is a much more simple point of reference for readers than z-scores are.
 
 ```{r day-of-week-z-scores}
 # Calculate day-of-week adjusted z-scores
@@ -298,5 +298,5 @@ top_outliers |> kable(digits = 2)
 
 Based on our z-score analysis, what are some potential angles for reporting? What would your next steps be and what would you tell an editor about your findings?
 
-ANSWER HERE
+Based on this analysis, a reporter would look into what caused these extreme outliers: why were calls so high on 10/4? Why were two of the three days with the highest number of calls in July? What leads to such a low number of calls in December, Feburary, and other cold months?
 
