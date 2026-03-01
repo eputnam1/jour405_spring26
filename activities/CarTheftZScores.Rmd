@@ -271,3 +271,8 @@ When reporting on these findings, remember to:
 2. **Investigate Causes**: Follow up on unusual values to understand the underlying reasons
 3. **Consider Multiple Metrics**: Look at both raw numbers and population-adjusted figures
 4. **Account for Seasonality**: Consider whether values are unusual compared to the same time of year
+
+```{r}
+read_csv("https://gist.githubusercontent.com/dwillis/25102889f576b1707576b85e0be0c353/raw/1ca2be9636497cb5293ff7b1f4e6ed8e27a9e049/car_theft_pnorm.rmd")
+```
+
