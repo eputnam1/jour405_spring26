@@ -112,8 +112,8 @@ This is where we formally test the officials' claim. Fill in the REPLACE_ME valu
 
 **Hypotheses:**
 
-- **H₀ (Null):** REPLACE_ME
-- **H₁ (Alternative):** REPLACE_ME
+- **H₀ (Null):** Home values have not changed.
+- **H₁ (Alternative):** Home values have increased.
 
 ```{r}
 # Set the significance level
