@@ -107,11 +107,11 @@ second_half_stats <- period_summary |> filter(period == "Second Half")
 pooled_sd <- sqrt(
   ((first_half_stats$months - 1) * first_half_stats$sd_thefts^2 +
    (second_half_stats$months - 1) * second_half_stats$sd_thefts^2) /
-  (first_half_stats$months + second_half_stats$months - REPLACE_ME)
+  (first_half_stats$months + second_half_stats$months - 2)
 )
 
 # Calculate Cohen's d
-cohens_d <- (first_half_stats$mean_thefts - REPLACE_ME) / pooled_sd
+cohens_d <- (first_half_stats$mean_thefts - second_half_stats$mean_thefts) / pooled_sd
 
 # Interpret it
 effect_label <- case_when(
@@ -132,7 +132,7 @@ tibble(
 
 **Answer this question:** How would you describe this effect size? Compare it to the effect sizes we calculated in class (the response times activity had a small effect, the housing prices activity had a medium effect). What does a large effect size mean for the story you'd write about car thefts?
 
-PUT ANSWERS HERE
+The Cohen's d formula determined that there is a large difference between the first and second half means. This means that there has been a significant, meaningful decrease in car thefts in the county that is worthy of being reported.
 
 ### Task 5: Putting it all together (7 points)
 
@@ -140,10 +140,12 @@ You now have three pieces of evidence: the confidence intervals from last week, 
 
 1. In Part 1, your editor asked "just tell me if car thefts are going up or down". Now you have significance testing. Write 2-3 sentences telling your editor the answer, using all three pieces of evidence (CI, p-value, and effect size).
 
-PUT ANSWERS HERE
+Looking at the p-value of 2.14e-05, less than the 0.05 threshold, we know that there has been a statistically significant change in car thefts. The second half's of the monthly data's confidence interval does not overlap with the higher confidence interval of the first half, so we know that there has been a decrease in car thefts. Finally, looking at the effect size, we can determine that there has been a significant, meaningful decrease in car thefts in the county.
 
 2. Write a headline and a 2-3 sentence lede for a story about car thefts in Prince George's County. Unlike the response times story from class (where the effect was small and the headline needed to be cautious), this is a case where the data strongly supports a clear conclusion. Your writing should reflect that — but still note the limitations (correlation vs. causation, what else might explain the decline).
 
-PUT ANSWERS HERE
+Car Thefts Decline in Prince George's County
+
+Data shows that between July 2023 and February 2026, car thefts declined in Prince George's County. This period has been divided into two halves: the first half of surveyed months experienced an average of about 439 car thefts per month, while the second half experienced about 312. There may be a variety of reasons for this decline.
 
 When you are finished, save your work, switch to GitHub Desktop, then add, commit and push your changes to GitHub and submit the URL of the notebook in ELMS.
