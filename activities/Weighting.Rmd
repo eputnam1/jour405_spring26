@@ -94,9 +94,15 @@ ggplot(nonvoters_data, aes(x = weight)) +
 
 1. What is the range of weights in this dataset?
 
+The range of weights is 0.2298 to 3.0386.
+
 2. What does it mean when a respondent has a weight of 0.23? What about 3.04?
 
+When a respondent has a weight lower than 1, that is because they are over-representing a demographic in the sample, and the value of their responses is thus being lowered to match the true population. The inverse is true for those with a weight above 1.
+
 3. Why might some respondents be weighted more heavily than others?
+
+Respondents who are part of a very large or small demographic may be weighted to assure that the sample is as similar to the true population as possible.
 
 # Exercise 1: Voter Categories and Weighting
 
@@ -233,6 +239,12 @@ kable(comparison, digits = 1, caption = "Difference Between Weighted and Unweigh
 
 1. Which voter category shows the biggest difference between weighted and unweighted results?
 
+The rarely/never category.
+
 2. How might these differences affect reporting on likely voter turnout?
 
+The affect could be significantly higher voter turnout than expected as well as different election results than expected because "rarely/never" voters can change their minds and vote, and choosing to not account for them or to weight their responses low leaves reporters with a very flawed idea of what and who the majority of voters really are.
+
 3. Why do you think these differences exist? What does this tell us about who might be over or under-represented in the sample?
+
+These differences may exist because people are not truthful/change their minds about their voting intentions, which can lead to poor weighting and inaccurate results.
