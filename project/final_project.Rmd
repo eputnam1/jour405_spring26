@@ -1,0 +1,57 @@
+---
+title: "final_project"
+name: Ethan Putnam
+---
+
+```{r}
+library(tidyverse)
+```
+
+# Note: I am struggling to get this data to open correctly in RStudio. Spreadsheets were created in Google Drive, downloaded as CSV files, then uploaded to my project file on GitHub. However, when I read the permalink in this file, the data does not come through as it should. The sheets are very simple: just column names and the raw numbers, so I do not know what is causing this problem.
+
+
+# Loading election data uploaded to GitHub
+
+```{r}
+fredco_election <- read_csv("https://github.com/eputnam1/jour405_spring26/blob/1ad8c1fde48fdcdf25064a0535469ffbb3858a3e/project/fredcoelection.csv")
+
+moco_election <- read_csv("https://github.com/eputnam1/jour405_spring26/blob/1ad8c1fde48fdcdf25064a0535469ffbb3858a3e/project/mocoelection.csv")
+
+pgco_election <- read_csv("https://github.com/eputnam1/jour405_spring26/blob/1ad8c1fde48fdcdf25064a0535469ffbb3858a3e/project/pgelection.csv")
+
+wasco_election <- read_csv("https://github.com/eputnam1/jour405_spring26/blob/1ad8c1fde48fdcdf25064a0535469ffbb3858a3e/project/washingtonelection.csv")
+```
+
+This data shows the outcome of all presidential election votes since 1960 in Frederick, Montgomery, Prince George's, and Washington County. 
+
+For each election, I have included the percentage of the vote won by the Democratic and Republican nominee, because I could not find the raw vote counts.
+
+# Citations
+
+This data was pulled in its entirety from the U.S. Election Atlas (https://uselectionatlas.org/). As I said, I would have preferred the raw voting numbers, but I could not find them going back as far as I would like. This is a good source and provides strong data to help with this project nonetheless.
+
+# Loading population data uploaded to GitHub
+
+```{r}
+fredco_pop <- read_csv("https://github.com/eputnam1/jour405_spring26/blob/1ad8c1fde48fdcdf25064a0535469ffbb3858a3e/project/fredcopopulation.csv")
+
+moco_pop <- read_csv("https://github.com/eputnam1/jour405_spring26/blob/1ad8c1fde48fdcdf25064a0535469ffbb3858a3e/project/mocopopulation.csv")
+```
+
+This data shows the changes in population in Frederick and Montgomery County from 1960-2025. I did not create datasets for Prince George's or Washington County because those counties have not experienced many changes politically, and thus population change seems irrelevant to the question at hand. 
+
+While Montgomery County has not experienced political shifts like Frederick has, I still pulled the population data to give a contrast to Frederick and to maybe look into later to address whether or not people are leaving Montgomery County due to high cost of living and moving to Frederick, like some people in Frederick have told me.
+
+# Citations
+
+Frederick County data: https://docs.google.com/document/d/154GlaqQJFAn337gbp0lxWuQihw4z66KrhH8LPLNeVxw/edit?usp=sharing
+
+Montgomery County data: https://docs.google.com/document/d/1WYr1rr3D2ipttLgrcydP5x3jWVjamItI-sd9jbLHFRU/edit?usp=sharing
+
+These links navigate to google docs compiling the sources used to assemble the population data.
+
+# Next Steps
+
+After figuring out how to get the data to import correctly, I think that the next step will be to create a visualization to show what political shifts have actually occurred in each county, and then to put Frederick's political shifts side-by-side with population shifts. I will do the same with Montgomery County.
+
+If there is anything else that I should be doing, please let me know!
