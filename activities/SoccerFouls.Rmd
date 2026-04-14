@@ -49,5 +49,23 @@ matches |>
 
 ### Task 6: Describe the results of both the correlation calculation and the scatterplot.
 
+The correlation calculation showed that there is very little correlation between fouls and goal differential, less than 2%. The scatterplot backs this up, and the correlation line on the scatterplot is nearly flat, with no evident data correlation around it.
+
+
+### Task 7: Choose another variable and repeat the steps in Tasks 4 - 5. Then, describe the results.
+
+```{r}
+
+matches |> summarize(correlation = cor(corners, goal_diff, method="pearson"))
+
+matches |> 
+  ggplot() +
+  geom_point(aes(x=goal_diff, y=corners)) +
+  geom_smooth(aes(x=goal_diff, y=corners), method="lm")
+
+```
+
+When looking at these results, there is a positive correlation between corners and goal differential. The correlation of approximately 0.38 denotes a somewhat significant correlation, and the scatterplot shows that more corners generally leads to a higher goal differential.
+
 
 When you are done, save your work, switch to GitHub Desktop, then add, commit and push your changes to GitHub and submit the URL of the notebook in ELMS.
