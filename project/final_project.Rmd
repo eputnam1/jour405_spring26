@@ -7,19 +7,30 @@ name: Ethan Putnam
 library(tidyverse)
 ```
 
-# Note: I am struggling to get this data to open correctly in RStudio. Spreadsheets were created in Google Drive, downloaded as CSV files, then uploaded to my project file on GitHub. However, when I read the permalink in this file, the data does not come through as it should. The sheets are very simple: just column names and the raw numbers, so I do not know what is causing this problem.
+# Potential tests
 
+Some tests that I think could help to determine if Frederick has become a purple county would be:
+
+- Hypothesis test to determine if Frederick has actually experienced a change in voting results (an increase in Democratic support and a decrease in Republican support). However, I am unsure of how to actually put the code together. 
+
+- A confidence interval test could also be used to determine how much of a change has occurred, if any. I also am not sure how to put this together, or if it would apply as much as a hypothesis test, but I put both just in case.
+
+- GGPlot would be a great tool to use, too. It will be essential to create a graph showing the compared success of Democratic and Republican candidates in Frederick, along with population growth.
+
+- I also want to test for correlation between population increase and the increased success of Democratic candidates, to see how related those two variables are.
+
+I am not fully confident on most of these, and may have missed some that would apply. I have the data loaded in and combined correctly now, and if you have any other suggestions for what to do with this data, please let me know!
 
 # Loading election data uploaded to GitHub
 
 ```{r}
-fredco_election <- read_csv("https://github.com/eputnam1/jour405_spring26/blob/1ad8c1fde48fdcdf25064a0535469ffbb3858a3e/project/fredcoelection.csv")
+fredco_election <- read_csv("https://raw.githubusercontent.com/eputnam1/jour405_spring26/refs/heads/main/project/fredcoelection.csv")
 
-moco_election <- read_csv("https://github.com/eputnam1/jour405_spring26/blob/1ad8c1fde48fdcdf25064a0535469ffbb3858a3e/project/mocoelection.csv")
+moco_election <- read_csv("https://raw.githubusercontent.com/eputnam1/jour405_spring26/refs/heads/main/project/mocoelection.csv")
 
-pgco_election <- read_csv("https://github.com/eputnam1/jour405_spring26/blob/1ad8c1fde48fdcdf25064a0535469ffbb3858a3e/project/pgelection.csv")
+pgco_election <- read_csv("https://raw.githubusercontent.com/eputnam1/jour405_spring26/refs/heads/main/project/pgelection.csv")
 
-wasco_election <- read_csv("https://github.com/eputnam1/jour405_spring26/blob/1ad8c1fde48fdcdf25064a0535469ffbb3858a3e/project/washingtonelection.csv")
+wasco_election <- read_csv("https://raw.githubusercontent.com/eputnam1/jour405_spring26/refs/heads/main/project/washingtonelection.csv")
 ```
 
 This data shows the outcome of all presidential election votes since 1960 in Frederick, Montgomery, Prince George's, and Washington County. 
@@ -33,9 +44,9 @@ This data was pulled in its entirety from the U.S. Election Atlas (https://usele
 # Loading population data uploaded to GitHub
 
 ```{r}
-fredco_pop <- read_csv("https://github.com/eputnam1/jour405_spring26/blob/1ad8c1fde48fdcdf25064a0535469ffbb3858a3e/project/fredcopopulation.csv")
+fredco_pop <- read_csv("https://raw.githubusercontent.com/eputnam1/jour405_spring26/refs/heads/main/project/fredcopopulation.csv")
 
-moco_pop <- read_csv("https://github.com/eputnam1/jour405_spring26/blob/1ad8c1fde48fdcdf25064a0535469ffbb3858a3e/project/mocopopulation.csv")
+moco_pop <- read_csv("https://raw.githubusercontent.com/eputnam1/jour405_spring26/refs/heads/main/project/mocopopulation.csv")
 ```
 
 This data shows the changes in population in Frederick and Montgomery County from 1960-2025. I did not create datasets for Prince George's or Washington County because those counties have not experienced many changes politically, and thus population change seems irrelevant to the question at hand. 
@@ -55,3 +66,25 @@ These links navigate to google docs compiling the sources used to assemble the p
 After figuring out how to get the data to import correctly, I think that the next step will be to create a visualization to show what political shifts have actually occurred in each county, and then to put Frederick's political shifts side-by-side with population shifts. I will do the same with Montgomery County.
 
 If there is anything else that I should be doing, please let me know!
+
+# Combining files
+
+```{r}
+fredco_election <- fredco_election |> mutate(county = "Frederick")
+moco_election <- moco_election |> mutate(county = "Montgomery")
+pgco_election <- pgco_election |> mutate(county = "Prince George's")
+wasco_election <- wasco_election |> mutate(county = "Washington")
+
+combined_election <- bind_rows(fredco_election, moco_election, pgco_election, wasco_election)
+
+
+fredco_pop <- fredco_pop |> mutate(county = "Frederick")
+moco_pop <- moco_pop |> mutate(county = "Montgomery")
+
+combined_pop <- bind_rows(fredco_pop, moco_pop)
+```
+
+
+
+
+
