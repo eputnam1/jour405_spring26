@@ -1,6 +1,6 @@
 ---
 title: "Identifying Schools with Biggest Differences in Math Test Scores, Part 2"
-author: "YOUR NAME"
+author: Ethan Putnam
 ---
 
 ```{r}
@@ -35,7 +35,7 @@ schools |>
 ```
 Based on what you see here, what's the relationship between FARMS percentage and math test scores? Compare this scatterplot to the one you made in the class activity.
 
-ANSWER HERE
+Based on this scatterplot, a higher percentage of FARMS-eligible students leads to a lower number of students exceeding math expectations. Compared to the scatterplot from the class activity, the data shows a more apparent trend. The data is however still less linear than the data we looked at for the scatterplot we made.
 
 
 ### Task: Linear Regression Model (7 points)
@@ -50,11 +50,11 @@ summary(model)
 
 Provide the model's output for the three statistics mentioned in the class activity.
 
-ANSWER HERE
+The p-value (< 0.0000) tells us that there are statistically significant results here. The Adjusted R-squared that the variation in math scores is 67% explained by FARMS percentage. The coefficient of -0.595 tells us that there is a noticeable negative relationship between these two variables.
 
 Based on what you've learned so far, what does it tell us about the nature of the relationship between FARMS percentage and math scores? Is this model worth exploring further? Why or why not?
 
-ANSWER HERE
+This tells us that there is a real and significant correlation between higher FARMS percentage and declining math scores. This model is still worth exploring further because while we have determined that there is a significant correlation, we should look to identify the extent of the correlation.
 
 ### Task: Identifying Schools with Biggest Residuals (3 points)
 
@@ -76,10 +76,16 @@ schools <- schools |>
 
 Look at the absolute values of the residuals; what are the largest differences between the predicted result and the actual math scores? Pick two schools with the largest residuals. Find the zip codes where they are located and using the CensusReporter.org website, describe the most interesting demographic data from each zip code.
 
-ANSWER HERE
+The two schools with the largest absolute values of residuals were Fox Chapel Elementary and Broad Acres Elementary. Fox Chapel was nearly 30 over, and Broad Acres was over by over 28.
+
+The zip code of Fox Chapel is 20876. The area has an average income per capita of about three quarters of the average income of the wider DMV region. The poverty rate of 9.8% is 20 percent above the DMV area, and the under 18 poverty rate of 21% is more than double that of the DMV and nearly double that of the state. 
+
+The zip code of Broad Acres (now JoAnn Leleck Elementary School at Broad Acres) is 20904. The area has slightly higher average income per capita to the other zip code, but has a lower poverty rate (9.3%), and a much lower under 18 poverty rate of 13%.
+
+According to Census Reporter, these figures have a margin of error of 10%.
 
 ## Task: Evaluate the model (5 points)
 
 Describe what conclusions you'd draw from this model's results and how it would influence a story pitch about the school board member and math scores.
 
-ANSWER HERE
+Looking at this information, it is clear that more FARMS-eligible students has had at least some correlation with lower math scores. However, it is also true that the highest residuals when looking at math scores were above expected for schools with over 50% FARMS-eligibility. When doing a story about the school board member's statement, it would be important to describe the overall trend that the board member identified, but to also provide context that gives readers a better understanding as to what may be the root cause of these results and why the declarative statement should not be viewed as an absolute truth.
