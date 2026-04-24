@@ -60,13 +60,13 @@ election_pop_data <- left_join(combined_election, combined_pop, join_by(county, 
 #GGPLOT
 
 ```{r}
-ggplot(combined_election, aes(x = year, y = dem_margin)) +
-  geom_line() +
+ggplot(fredco_election, aes(x = year)) +
+  geom_line((y = DEM), color = "blue") +
+  geom_line((y = REP), color = "red") +
   geom_point() +
-  theme_minimal() +
-  labs(title = "Margin of Presidential Election Vote Won By Democratic Nominee (1960-2024)",
+  labs(title = "Percentage of Presidential Election Vote Won By Democratic and Republican Candidates in Frederick County (1960-2024)",
        x = "Year",
-       y = "Margin of Victory/Defeat (PCT %)",
+       y = "Percentage of Vote Won",
        caption = "Source: U.S. Election Atlas")
 ```
 
