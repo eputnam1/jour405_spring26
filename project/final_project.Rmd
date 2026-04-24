@@ -7,6 +7,35 @@ name: Ethan Putnam
 library(tidyverse)
 ```
 
+# Adding more data, updating dataframes
+
+```{r}
+balco_election <- read_csv("https://raw.githubusercontent.com/eputnam1/jour405_spring26/refs/heads/main/project/Baltimore%20county%20election%20results%20-%20Sheet1.csv")
+garrco_election <- read_csv("https://raw.githubusercontent.com/eputnam1/jour405_spring26/refs/heads/main/project/Garrett%20county%20election%20results%20-%20Sheet1.csv")
+howco_election <- read_csv("https://raw.githubusercontent.com/eputnam1/jour405_spring26/refs/heads/main/project/Howard%20county%20election%20results%20-%20Sheet1.csv")
+wicco_election <- read_csv("https://raw.githubusercontent.com/eputnam1/jour405_spring26/refs/heads/main/project/Wicomico%20county%20election%20results%20-%20Sheet1.csv")
+
+balco_election <- balco_election |> mutate(county = "Baltimore")
+garrco_election <- garrco_election |> mutate(county = "Garrett")
+howco_election <- howco_election |> mutate(county = "Howard")
+wicco_election <- wicco_election |> mutate(county = "Wicomico")
+```
+
+
+```{r}
+combined_election <- bind_rows(fredco_election, moco_election, pgco_election, wasco_election, balco_election, garrco_election, howco_election, wicco_election)
+
+combined_election <- combined_election |> mutate(dem_margin = REP - DEM)
+```
+
+# Combining election and population dataframes
+
+```{r}
+election_pop_data <- left_join(combined_election, combined_pop, by = c("county", "year"))
+```
+
+
+
 # Potential tests
 
 Some tests that I think could help to determine if Frederick has become a purple county would be:
