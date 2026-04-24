@@ -7,7 +7,7 @@ name: Ethan Putnam
 library(tidyverse)
 ```
 
-# Adding more data, updating dataframes
+# Loading data, updating dataframes
 
 ```{r}
 balco_election <- read_csv("https://raw.githubusercontent.com/eputnam1/jour405_spring26/refs/heads/main/project/Baltimore%20county%20election%20results%20-%20Sheet1.csv")
@@ -19,21 +19,59 @@ balco_election <- balco_election |> mutate(county = "Baltimore")
 garrco_election <- garrco_election |> mutate(county = "Garrett")
 howco_election <- howco_election |> mutate(county = "Howard")
 wicco_election <- wicco_election |> mutate(county = "Wicomico")
-```
 
+fredco_election <- read_csv("https://raw.githubusercontent.com/eputnam1/jour405_spring26/refs/heads/main/project/fredcoelection.csv")
 
-```{r}
+moco_election <- read_csv("https://raw.githubusercontent.com/eputnam1/jour405_spring26/refs/heads/main/project/mocoelection.csv")
+
+pgco_election <- read_csv("https://raw.githubusercontent.com/eputnam1/jour405_spring26/refs/heads/main/project/pgelection.csv")
+
+wasco_election <- read_csv("https://raw.githubusercontent.com/eputnam1/jour405_spring26/refs/heads/main/project/washingtonelection.csv")
+
+fredco_election <- fredco_election |> mutate(county = "Frederick")
+moco_election <- moco_election |> mutate(county = "Montgomery")
+pgco_election <- pgco_election |> mutate(county = "Prince George's")
+wasco_election <- wasco_election |> mutate(county = "Washington")
+
 combined_election <- bind_rows(fredco_election, moco_election, pgco_election, wasco_election, balco_election, garrco_election, howco_election, wicco_election)
+
+
+
+fredco_pop <- read_csv("https://raw.githubusercontent.com/eputnam1/jour405_spring26/refs/heads/main/project/fredcopopulation.csv")
+
+moco_pop <- read_csv("https://raw.githubusercontent.com/eputnam1/jour405_spring26/refs/heads/main/project/mocopopulation.csv")
+
+fredco_pop <- fredco_pop |> mutate(county = "Frederick")
+moco_pop <- moco_pop |> mutate(county = "Montgomery")
+
+
+combined_pop <- bind_rows(fredco_pop, moco_pop)
 
 combined_election <- combined_election |> mutate(dem_margin = REP - DEM)
 ```
 
+
 # Combining election and population dataframes
 
 ```{r}
-election_pop_data <- left_join(combined_election, combined_pop, by = c("county", "year"))
+election_pop_data <- left_join(combined_election, combined_pop, join_by(county, YEAR==Year))
 ```
 
+#GGPLOT
+
+```{r}
+ggplot(combined_election, aes(x = year, y = dem_margin)) +
+  geom_line() +
+  geom_point() +
+  theme_minimal() +
+  labs(title = "Margin of Presidential Election Vote Won By Democratic Nominee (1960-2024)",
+       x = "Year",
+       y = "Margin of Victory/Defeat (PCT %)",
+       caption = "Source: U.S. Election Atlas")
+```
+
+
+# PREVIOUS WORK BELOW
 
 
 # Potential tests
