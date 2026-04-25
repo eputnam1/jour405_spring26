@@ -29,6 +29,9 @@ pgco_election <- read_csv("https://raw.githubusercontent.com/eputnam1/jour405_sp
 wasco_election <- read_csv("https://raw.githubusercontent.com/eputnam1/jour405_spring26/refs/heads/main/project/washingtonelection.csv")
 
 fredco_election <- fredco_election |> mutate(county = "Frederick")
+
+fredco_election <- fredco_election |> mutate(dem_margin = DEM - REP)
+
 moco_election <- moco_election |> mutate(county = "Montgomery")
 pgco_election <- pgco_election |> mutate(county = "Prince George's")
 wasco_election <- wasco_election |> mutate(county = "Washington")
@@ -47,7 +50,7 @@ moco_pop <- moco_pop |> mutate(county = "Montgomery")
 
 combined_pop <- bind_rows(fredco_pop, moco_pop)
 
-combined_election <- combined_election |> mutate(dem_margin = REP - DEM)
+combined_election <- combined_election |> mutate(dem_margin = DEM - REP)
 ```
 
 
@@ -57,21 +60,99 @@ combined_election <- combined_election |> mutate(dem_margin = REP - DEM)
 election_pop_data <- left_join(combined_election, combined_pop, join_by(county, YEAR==Year))
 ```
 
-#GGPLOT
+# GGPLOT
 
 ```{r}
-ggplot(fredco_election, aes(x = year)) +
-  geom_line((y = DEM), color = "blue") +
-  geom_line((y = REP), color = "red") +
-  geom_point() +
+fredco_election |>
+ggplot() +
+  geom_line(aes(x = YEAR, y = DEM), color = "blue") +
+  geom_line(aes(x = YEAR, y = REP), color = "red") +
   labs(title = "Percentage of Presidential Election Vote Won By Democratic and Republican Candidates in Frederick County (1960-2024)",
        x = "Year",
        y = "Percentage of Vote Won",
        caption = "Source: U.S. Election Atlas")
 ```
 
+There appears to be an increase in support for Democratic candidates and a decline in support for Republican candidates, but that still needs to be tested further.
+
+# Linear regression (Dem Margin x Year)
+
+```{r}
+model <- lm(dem_margin ~ YEAR, data = fredco_election)
+summary(model)
+```
+
+When examining Frederick County presdidential election data, it is clear from the p-value of 0.1504 that the change in the Democratic voting margin from 1960 to 2024 is statistically insignificant, as it is greater than the 0.05 threshold for statistical significance.
+
+The Adjusted R-squared value of 0.07499 means that about 7.5% of the change in the Democratic voting margin is explained by time, but that was not really the focus of this test. The coefficient of 0.3027 tells us that as time has gone on, the Democratic vote margin in presidential elections in Frederick County has grown.
+
+# Linear regression (Dem Margin x Population)
+
+```{r}
+
+fredco_pop_election <- left_join(fredco_election, fredco_pop, join_by(county, YEAR ==Year))
+
+model <- lm(dem_margin ~ Population, data = fredco_pop_election)
+summary(model)
+```
+
+When testing the correlation between population and the Democratic vote margin in Frederick County, the p-value of 0.2415 again tells us that these results are not statistically significant. The Adjusted R-squared tells us that about 36.3% of the change in the Democratic vote margin is explained by population, and the coefficient of 1.220e-04 tells us that there is a very slight increase in Democratic vote margin when the population grows.
+
+# Testing Dem. voting margin in other counties
+
+```{r}
+moco_election <- moco_election |> mutate(dem_margin = DEM - REP)
+moco_pop_election <- left_join(moco_election, moco_pop, join_by(county, YEAR ==Year))
+
+model <- lm(dem_margin ~ Population, data = fredco_pop_election)
+summary(model)
+```
+
+This test, now looking at Montgomery County, produced similar results. While the high p-value signifies that there has not necessarily been significant change, the positive (though small) coefficient tells us that there has been growth in the Democratic vote margin over time, and the Adjusted R-squared tells us that 36.3% of that change has been the result of population growth.
+
+
+```{r}
+pgco_election <- pgco_election |> mutate(dem_margin = DEM - REP)
+model <- lm(dem_margin ~ YEAR, data = pgco_election)
+summary(model)
+
+wasco_election <- wasco_election |> mutate(dem_margin = DEM - REP)
+model <- lm(dem_margin ~ YEAR, data = wasco_election)
+summary(model)
+```
+
+
+The test on Prince George's County prompted the first statistically significant results thus far, with a p-value of 1.1e-06. The coefficient (1.439) tells us that the Democratic vote margin has increased as time has gone on, and the Advanced R-squared tells us that 79.08% of this change is explained by time.
+
+```{r}
+balco_election <- balco_election |> mutate(dem_margin = DEM - REP)
+model <- lm(dem_margin ~ YEAR, data = balco_election)
+summary(model)
+
+garrco_election <- garrco_election |> mutate(dem_margin = DEM - REP)
+model <- lm(dem_margin ~ YEAR, data = garrco_election)
+summary(model)
+
+howco_election <- howco_election |> mutate(dem_margin = DEM - REP)
+model <- lm(dem_margin ~ YEAR, data = howco_election)
+summary(model)
+
+wicco_election <- wicco_election |> mutate(dem_margin = DEM - REP)
+model <- lm(dem_margin ~ YEAR, data = wicco_election)
+summary(model)
+```
+
+Here, we found a statistically significant increase in the Democratic vote margin in Baltimore County and Howard County, as well as a statistically significant decrease in Garrett County.
+
+# Notes
+
+While the Frederick County results are not significantly significant according to their p-values, the test is analyzing how much the Democratic vote margin has increased. This does not necessarily equate to if the county has become "purple" which would by nature not have a vast Democratic swing. A purple county is highly contested, so I do not believe these results completely write off Frederick having become purple. Both tests of Democratic vote margin's correlation with time and population showed a positive slope, so there has been some increase. 
+
+I am not sure how I should utilize the main dataframe (election_pop_data) that combines all counties and their respective election and (if applicable) population data. For these tests, I have found working with them individually to make the most sense, and do not know how I should go about testing that dataframe, or what to look for.
 
 # PREVIOUS WORK BELOW
+
+
 
 
 # Potential tests
