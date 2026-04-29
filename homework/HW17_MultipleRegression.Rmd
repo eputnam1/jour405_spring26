@@ -1,6 +1,6 @@
 ---
 title: "Multiple Regression Analysis: Maryland Voter Turnout"
-name: "YOUR NAME HERE"
+name: Ethan Putnam
 ---
 
 # Introduction
@@ -26,7 +26,9 @@ head(md_turnout)
 
 Before building our model, let's explore the data to understand the variables and their relationships. Examine the correlation matrix to see how the independent variables relate to each other and to the dependent variable (voter turnout). Which variables seem to be correlated? Are there any that are not correlated at all? Also look at the multiple scatterplots. Which variables seem to have a linear relationship with the dependent variable? Which do not?
 
-ANSWER HERE
+There appears to be correlation between unemployment and turnout, education and income, percentage white and turnout, and percentage white and population. There seems to be almost zero correlation between median age and education.
+
+The unemployment, percentage white, income, and median age scatterplots appear to have a linear relationship with the dependent variable, while education and population do not.
 
 
 ```{r}
@@ -89,7 +91,7 @@ The coefficients tell us the estimated effect of each independent variable on th
 
 Examine the output of the model, checking the coefficients, residuals, and overall model fit. How well does this multiple variable model predict turnout? Do any of the variables seem to be insignificant? Is this a useful model, based on what you've seen? Why?
 
-ANSWER HERE
+The Multiple R-squared tells us that over 85% of the variability in turnout is explained by the model. The Adjusted R-squared, accounting for the number variables, was 0.8023, which signifies a pretty strong fit. Percentage white, percentage unemployed, and percentage with a bachelor's degree or higher are the most significant, while population and income are the least.
 
 ```{r}
 # Build initial model with all predictors
@@ -103,19 +105,19 @@ summary(initial_model)
 
 Create three alternative models by adding or removing variables to see if we can improve the model's performance. Turnout will always be the dependent variable, but you should alter the independent variables by removing or adding some. Then compare the models using adjusted R-squared values. Are any of the models significantly better than the others?
 
-ANSWER HERE
+I did not make a model as strong as the original, in fact the original has an Adjusted R-squared that is 0.2 greater than the last model I made, Model 4. My thought was to remove the two least correlated categories and try with the others. I did not include percentage white in Model 4, which may have led to this.
 
 ```{r}
 # Model 2
-model2 <- lm(turnout ~ REPLACE ME, data = md_turnout)
+model2 <- lm(turnout ~ pct_bachelors_higher + pct_unemployed + pct_white, data = md_turnout)
 summary(model2)
 
 # Model 3
-model3 <- lm(turnout ~ REPLACE ME, data = md_turnout)
+model3 <- lm(turnout ~ pct_bachelors_higher + pct_unemployed + pct_white + median_age, data = md_turnout)
 summary(model3)
 
 # Model 4
-model4 <- lm(turnout ~ REPLACE ME, data = md_turnout)
+model4 <- lm(turnout ~ pct_bachelors_higher + pct_unemployed + median_age, data = md_turnout)
 summary(model4)
 
 # Compare models
@@ -144,4 +146,4 @@ ggplot(model_comparison, aes(x = reorder(Model, Adjusted_R_squared), y = Adjuste
 
 Without using the words "multiple regression model", describe how you could use this analysis to cover an election or voter participation story.
 
-ANSWER HERE
+These models help us to assess what demographic categories have a direct correlation with higher voting percentage across Maryland counties. Looking at the first model, there is a negative correlation between having a bachelor's degree or higher and voter turnout in Maryland, which seems unusual. This could be an angle. Percentage unemployed has an even stronger negatuve correlation, which could also be worth looking into.
