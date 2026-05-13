@@ -7,18 +7,16 @@ name: Ethan Putnam
 library(tidyverse)
 ```
 
-# Loading data, updating dataframes
+# Loading election data (source: US Election Atlas, US Census data from the Federal Reserve Bank of St. Louis)
 
 ```{r}
 balco_election <- read_csv("https://raw.githubusercontent.com/eputnam1/jour405_spring26/refs/heads/main/project/Baltimore%20county%20election%20results%20-%20Sheet1.csv")
-garrco_election <- read_csv("https://raw.githubusercontent.com/eputnam1/jour405_spring26/refs/heads/main/project/Garrett%20county%20election%20results%20-%20Sheet1.csv")
-howco_election <- read_csv("https://raw.githubusercontent.com/eputnam1/jour405_spring26/refs/heads/main/project/Howard%20county%20election%20results%20-%20Sheet1.csv")
-wicco_election <- read_csv("https://raw.githubusercontent.com/eputnam1/jour405_spring26/refs/heads/main/project/Wicomico%20county%20election%20results%20-%20Sheet1.csv")
 
-balco_election <- balco_election |> mutate(county = "Baltimore")
-garrco_election <- garrco_election |> mutate(county = "Garrett")
-howco_election <- howco_election |> mutate(county = "Howard")
-wicco_election <- wicco_election |> mutate(county = "Wicomico")
+garrco_election <- read_csv("https://raw.githubusercontent.com/eputnam1/jour405_spring26/refs/heads/main/project/Garrett%20county%20election%20results%20-%20Sheet1.csv")
+
+howco_election <- read_csv("https://raw.githubusercontent.com/eputnam1/jour405_spring26/refs/heads/main/project/Howard%20county%20election%20results%20-%20Sheet1.csv")
+
+wicco_election <- read_csv("https://raw.githubusercontent.com/eputnam1/jour405_spring26/refs/heads/main/project/Wicomico%20county%20election%20results%20-%20Sheet1.csv")
 
 fredco_election <- read_csv("https://raw.githubusercontent.com/eputnam1/jour405_spring26/refs/heads/main/project/fredcoelection.csv")
 
@@ -28,39 +26,65 @@ pgco_election <- read_csv("https://raw.githubusercontent.com/eputnam1/jour405_sp
 
 wasco_election <- read_csv("https://raw.githubusercontent.com/eputnam1/jour405_spring26/refs/heads/main/project/washingtonelection.csv")
 
+
+# Adding county context to the data
+
+balco_election <- balco_election |> mutate(county = "Baltimore")
+garrco_election <- garrco_election |> mutate(county = "Garrett")
+howco_election <- howco_election |> mutate(county = "Howard")
+wicco_election <- wicco_election |> mutate(county = "Wicomico")
 fredco_election <- fredco_election |> mutate(county = "Frederick")
-
-fredco_election <- fredco_election |> mutate(dem_margin = DEM - REP)
-
 moco_election <- moco_election |> mutate(county = "Montgomery")
 pgco_election <- pgco_election |> mutate(county = "Prince George's")
 wasco_election <- wasco_election |> mutate(county = "Washington")
 
+# Combining data
+
 combined_election <- bind_rows(fredco_election, moco_election, pgco_election, wasco_election, balco_election, garrco_election, howco_election, wicco_election)
 
+# Adding the Democratic vote margin
 
+fredco_election <- fredco_election |> mutate(dem_margin = DEM - REP)
 
-fredco_pop <- read_csv("https://raw.githubusercontent.com/eputnam1/jour405_spring26/refs/heads/main/project/fredcopopulation.csv")
+combined_election <- combined_election |> mutate(dem_margin = DEM - REP)
 
-moco_pop <- read_csv("https://raw.githubusercontent.com/eputnam1/jour405_spring26/refs/heads/main/project/mocopopulation.csv")
+# Population data (same steps)
+
+fredco_pop <- read_csv("https://raw.githubusercontent.com/eputnam1/jour405_spring26/refs/heads/main/project/Frederick%20county%20population%20-%20Sheet1.csv")
+
+moco_pop <- read_csv("https://raw.githubusercontent.com/eputnam1/jour405_spring26/refs/heads/main/project/Montgomery%20county%20population%20-%20Sheet1.csv")
+
+pgco_pop <- read_csv("https://raw.githubusercontent.com/eputnam1/jour405_spring26/refs/heads/main/project/pgcopop%20-%20Sheet1.csv")
+
+balco_pop <- read_csv("https://raw.githubusercontent.com/eputnam1/jour405_spring26/refs/heads/main/project/balcopop%20-%20MDBALT0POP.csv")
+
+wicco_pop <- read_csv("https://raw.githubusercontent.com/eputnam1/jour405_spring26/refs/heads/main/project/wiccopop%20-%20MDWICO5POP.csv")
+
+garrco_pop <- read_csv("https://raw.githubusercontent.com/eputnam1/jour405_spring26/refs/heads/main/project/garrcopop%20-%20MDGARR3POP.csv")
+
+howco_pop <- read_csv("https://raw.githubusercontent.com/eputnam1/jour405_spring26/refs/heads/main/project/howcopop%20-%20MDHOWA0POP.csv")
+
+wasco_pop <- read_csv("https://raw.githubusercontent.com/eputnam1/jour405_spring26/refs/heads/main/project/wascopop%20-%20MDWASH5POP.csv")
+
+# Combining
 
 fredco_pop <- fredco_pop |> mutate(county = "Frederick")
 moco_pop <- moco_pop |> mutate(county = "Montgomery")
+pgco_pop <- pgco_pop |> mutate(county = "Prince George's")
+balco_pop <- balco_pop |> mutate(county = "Baltimore")
+wicco_pop <- wicco_pop |> mutate(county = "Wicomico")
+garrco_pop <- garrco_pop |> mutate(county = "Garrett")
+howco_pop <- howco_pop |> mutate(county = "Howard")
+wasco_pop <- wasco_pop |> mutate(county = "Washington")
 
+combined_pop <- bind_rows(fredco_pop, moco_pop, pgco_pop, balco_pop, wicco_pop, garrco_pop, howco_pop, wasco_pop)
 
-combined_pop <- bind_rows(fredco_pop, moco_pop)
+# ALL DATA
 
-combined_election <- combined_election |> mutate(dem_margin = DEM - REP)
+election_pop_data <- left_join(combined_election, combined_pop, join_by(county, YEAR))
 ```
 
-
-# Combining election and population dataframes
-
-```{r}
-election_pop_data <- left_join(combined_election, combined_pop, join_by(county, YEAR==Year))
-```
-
-# GGPLOT
+# Creating a Frederick election histogram
 
 ```{r}
 fredco_election |>
@@ -75,85 +99,206 @@ ggplot() +
 
 There appears to be an increase in support for Democratic candidates and a decline in support for Republican candidates, but that still needs to be tested further.
 
-# Linear regression (Dem Margin x Year)
+# Linear regression (Dem Margin x Year), looking for significant change in Democratic voting results over time
 
 ```{r}
 model <- lm(dem_margin ~ YEAR, data = fredco_election)
 summary(model)
 ```
 
-When examining Frederick County presdidential election data, it is clear from the p-value of 0.1504 that the change in the Democratic voting margin from 1960 to 2024 is statistically insignificant, as it is greater than the 0.05 threshold for statistical significance.
+When examining Frederick County presidential election data, it is clear from the p-value of 0.1504 that the change in the Democratic voting margin from 1960 to 2024 is statistically insignificant, as it is greater than the 0.05 threshold for statistical significance.
 
 The Adjusted R-squared value of 0.07499 means that about 7.5% of the change in the Democratic voting margin is explained by time, but that was not really the focus of this test. The coefficient of 0.3027 tells us that as time has gone on, the Democratic vote margin in presidential elections in Frederick County has grown.
 
-# Linear regression (Dem Margin x Population)
+# Linear regression (Dem Margin x Population), to see if population change explains the (statistically insignificant) change in Democratic vote margin over time in Frederick)
 
 ```{r}
+fredco_pop_election <- left_join(fredco_election, fredco_pop, join_by(county, YEAR))
 
-fredco_pop_election <- left_join(fredco_election, fredco_pop, join_by(county, YEAR ==Year))
-
-model <- lm(dem_margin ~ Population, data = fredco_pop_election)
+model <- lm(dem_margin ~ POP, data = fredco_pop_election)
 summary(model)
 ```
 
-When testing the correlation between population and the Democratic vote margin in Frederick County, the p-value of 0.2415 again tells us that these results are not statistically significant. The Adjusted R-squared tells us that about 36.3% of the change in the Democratic vote margin is explained by population, and the coefficient of 1.220e-04 tells us that there is a very slight increase in Democratic vote margin when the population grows.
+When testing the correlation between population and the Democratic vote margin in Frederick County, the p-value of 0.0002765 tells us that thereis statistical significance. The Adjusted R-squared tells us that about 65.5% of the change in the Democratic vote margin is explained by population, and the coefficient of 1.944e-04 tells us that there is a very slight increase in Democratic vote margin when the population grows.
 
 # Testing Dem. voting margin in other counties
 
 ```{r}
 moco_election <- moco_election |> mutate(dem_margin = DEM - REP)
-moco_pop_election <- left_join(moco_election, moco_pop, join_by(county, YEAR ==Year))
+moco_pop_election <- left_join(moco_election, moco_pop, join_by(county, YEAR))
 
-model <- lm(dem_margin ~ Population, data = fredco_pop_election)
+# Testing Montgomery County Democratic margin shift over time, as it relates to population change
+
+model <- lm(dem_margin ~ YEAR, data = moco_pop_election)
+summary(model)
+
+model <- lm(dem_margin ~ POP, data = moco_pop_election)
 summary(model)
 ```
 
-This test, now looking at Montgomery County, produced similar results. While the high p-value signifies that there has not necessarily been significant change, the positive (though small) coefficient tells us that there has been growth in the Democratic vote margin over time, and the Adjusted R-squared tells us that 36.3% of that change has been the result of population growth.
+This test, now looking at Montgomery County, produced similar but even more defined results. The very small p-values show statistical significance in both tests, the positive (though small) coefficients tell us that there is a positive correlation between Democratic vote margin both over time and by population change, and the Adjusted R-squared tells us that 95.8% of that change has been the result of population growth. This makes sense for the largest county in a once very rural state.
 
 
 ```{r}
 pgco_election <- pgco_election |> mutate(dem_margin = DEM - REP)
-model <- lm(dem_margin ~ YEAR, data = pgco_election)
+pgco_pop_election <- left_join(pgco_election, pgco_pop, join_by(county, YEAR))
+
+model <- lm(dem_margin ~ YEAR, data = pgco_pop_election)
 summary(model)
 
-wasco_election <- wasco_election |> mutate(dem_margin = DEM - REP)
-model <- lm(dem_margin ~ YEAR, data = wasco_election)
+model <- lm(dem_margin ~ POP, data = pgco_pop_election)
 summary(model)
 ```
 
+The test on Prince George's County prompted statistically significant results (with a p-value of 1.1e-06). The coefficient (1.439) tells us that the Democratic vote margin has increased as time has gone on, and the Advanced R-squared tells us that 79.08% of this change is explained by time. However, the second test showed that in this case, the change in Democratic vote margin is not a result of population change.
 
-The test on Prince George's County prompted the first statistically significant results thus far, with a p-value of 1.1e-06. The coefficient (1.439) tells us that the Democratic vote margin has increased as time has gone on, and the Advanced R-squared tells us that 79.08% of this change is explained by time.
+# Testing for competition
+
+Through our previous tests, we can not say definitively that there has been a significant change in the Democratic voting margin in Frederick, but we know that the change that there has been has been largely the result of population growth, as was the case in Montgomery County.
+
+For an area to be considered "purple," it must be politically competitive. Now, I want to test the absolute value of the Democratic vote margin to see if the lines in Frederick have gotten closer.
 
 ```{r}
-balco_election <- balco_election |> mutate(dem_margin = DEM - REP)
-model <- lm(dem_margin ~ YEAR, data = balco_election)
+election_pop_data <- election_pop_data |> mutate(abs_margin = abs(dem_margin))
+
+fredco_pop_election <- fredco_pop_election |> mutate(abs_margin = abs(dem_margin))
+
+# Looking for a change over time
+
+model <- lm(abs_margin ~ YEAR, data = fredco_pop_election)
 summary(model)
 
-garrco_election <- garrco_election |> mutate(dem_margin = DEM - REP)
-model <- lm(dem_margin ~ YEAR, data = garrco_election)
-summary(model)
+# Related to population change?
 
-howco_election <- howco_election |> mutate(dem_margin = DEM - REP)
-model <- lm(dem_margin ~ YEAR, data = howco_election)
-summary(model)
-
-wicco_election <- wicco_election |> mutate(dem_margin = DEM - REP)
-model <- lm(dem_margin ~ YEAR, data = wicco_election)
+model <- lm(abs_margin ~ POP, data = fredco_pop_election)
 summary(model)
 ```
 
-Here, we found a statistically significant increase in the Democratic vote margin in Baltimore County and Howard County, as well as a statistically significant decrease in Garrett County.
+This test shows us that there has been a decline in the absolute value of the Democratic voting margin over time, meaning that voting lines are getting closer. The p-value (> 0.05) shows significance, and the coefficient of -0.3245 tells us that the change in the voting margin has been a decline -- closer to 50/50. The adjusted R-squared value tells us that the passage of time only explains about 28% in the change in voter margin, and the other test showed that only 43.85% is explained by population change.
+
+# Visualizing the change in election competition
+
+```{r}
+fredco_pop_election |>
+ggplot() +
+  geom_line(aes(x = YEAR, y = abs_margin), color = "purple") +
+  labs(title = "Presidential Election Margin of Victory in Frederick County (1960-2024)",
+       x = "Year",
+       y = "Margin of Victory (%)",
+       caption = "Source: U.S. Election Atlas")
+```
+
+This histogram depicts what we determined: the margin of victory in Frederick County elections is declining, meaning that races have been closer recently than they were in previous decades. This is the strongest indicator of a purple county.
+
+# In comparison...
+
+```{r}
+moco_pop_election <- moco_pop_election |> mutate(abs_margin = abs(dem_margin))
+
+moco_pop_election |>
+ggplot() +
+  geom_line(aes(x = YEAR, y = abs_margin), color = "blue") +
+  labs(title = "Presidential Election Margin of Victory in Montgomery County (1960-2024)",
+       x = "Year",
+       y = "Margin of Victory (%)",
+       caption = "Source: U.S. Election Atlas")
+
+
+pgco_pop_election <- pgco_pop_election |> mutate(abs_margin = abs(dem_margin))
+
+pgco_pop_election |>
+ggplot() +
+  geom_line(aes(x = YEAR, y = abs_margin), color = "blue") +
+  labs(title = "Presidential Election Margin of Victory in Prince George's County (1960-2024)",
+       x = "Year",
+       y = "Margin of Victory (%)",
+       caption = "Source: U.S. Election Atlas")
+
+
+garrco_pop_election <- left_join(garrco_election, garrco_pop, join_by(county, YEAR))
+garrco_pop_election <- garrco_pop_election |> mutate(dem_margin = DEM - REP)
+garrco_pop_election <- garrco_pop_election |> mutate(abs_margin = abs(dem_margin))
+
+garrco_pop_election |>
+ggplot() +
+  geom_line(aes(x = YEAR, y = abs_margin), color = "red") +
+  labs(title = "Presidential Election Margin of Victory in Garrett County (1960-2024)",
+       x = "Year",
+       y = "Margin of Victory (%)",
+       caption = "Source: U.S. Election Atlas")
+
+wicco_pop_election <- left_join(wicco_election, wicco_pop, join_by(county, YEAR))
+wicco_pop_election <- wicco_pop_election |> mutate(dem_margin = DEM - REP)
+wicco_pop_election <- wicco_pop_election |> mutate(abs_margin = abs(dem_margin))
+
+wicco_pop_election |>
+ggplot() +
+  geom_line(aes(x = YEAR, y = abs_margin), color = "purple") +
+  labs(title = "Presidential Election Margin of Victory in Wicomico County (1960-2024)",
+       x = "Year",
+       y = "Margin of Victory (%)",
+       caption = "Source: U.S. Election Atlas")
+```
+
+These histograms show a variety of alternate outcomes to the Frederick test. In Montgomery and Prince George's County, the margin of victory as steadily increased in favor of Democrats, moving those counties deeper and deeper blue.
+
+Garrett County has also experienced an increase in margin of victory, but in favor of Republicans.
+
+The next-closest county to Frederick in terms of a purple shift is Wicomico County. 
+
+# Examining population differential between Frederick and Wicomico
+
+```{r}
+fredco_pop_election |> summarize(POP)
+wicco_pop_election |> summarize(POP)
+```
+
+The population between these two purple counties is vastly different. Frederick currently has a population of 298855, while Wicomico has a mere 106639.
+
+# Visualizing
+
+```{r}
+fredco_pop <- fredco_pop |> mutate(FREDPOP = POP)
+wicco_pop <- wicco_pop |> mutate(WICPOP = POP)
+fred_wic_pop <- left_join(fredco_pop, wicco_pop, join_by(YEAR))
+
+fred_wic_pop |>
+ggplot() +
+  geom_line(aes(x = YEAR, y = FREDPOP), color = "blue") +
+  geom_line(aes(x = YEAR, y = WICPOP), color = "darkgreen") +
+  labs(title = "Population of Frederick and Wicomico County (1970-2025)",
+       x = "Year",
+       y = "Population",
+       caption = "Frederick County: Blue, Wicomico County: Green; Source: U.S. Election Atlas")
+```
+
+Frederick has a population much larger than Wicomico, as evidenced by this histogram. Despite the similarly close voting lines in both counties, Frederick's much larger population makes it a much more notable "purple" region, since larger regions tend to lean one way more than the other (Montgomery County being a prime example). Through this, we can better compare a place like Frederick to swing states that make a big difference in presidential elections, and even the country as a whole.
+
+# Story Pitch
+
+Through these tests, we have determined that Frederick County has had a decline in margin of victory in elections, with a red or blue advantage becoming slimmer and slimmer over the decades between 1960 and now.
+
+We also determined that that change is largely the result of a growing population. Montgomery County proved to be a strong comparison, as it has also experienced a population incline that relates to an increase in Democratic election success. The difference being in Frederick, that change brings voting lines closer to even whike in Montgomery County, that change further expands the already-large Democratic margin.
+
+I wrote a story about the change in Frederick County's voting patterns for CNS, but to approach a new data-based story based on these findings, I would focus on comparing Frederick to counties like Montgomery (for population correlationn), Wicomico (for similar purple voting lines), and Garrett (for a true red county in the state). 
+
+I would be looking to report on how and why Democrats have seen a rise in support in Frederick. A major factor that was identified via tests was population rise. How has the population risen? What policies/trends have allowed this to happen? If doing the story again, I would focus on asking local policymakers these questions, because the data showed that over 65% of the change in Democratic vote margin is a result of population change.
+
+I think that the top challenge with this story is the statistical insignificance of the change in Democratic vote margin. I believe this is a result of a lack of sufficient data (because future elections that may continue to lean blue are yet to come). However, I think that the trend is fairly clear, and the upcoming 2026 elections, both statewide and local, make this a newsworthy story.
+
+
+
+
+
+
+# PREVIOUS WORK BELOW (Don't run functions)
+
 
 # Notes
 
 While the Frederick County results are not significantly significant according to their p-values, the test is analyzing how much the Democratic vote margin has increased. This does not necessarily equate to if the county has become "purple" which would by nature not have a vast Democratic swing. A purple county is highly contested, so I do not believe these results completely write off Frederick having become purple. Both tests of Democratic vote margin's correlation with time and population showed a positive slope, so there has been some increase. 
 
 I am not sure how I should utilize the main dataframe (election_pop_data) that combines all counties and their respective election and (if applicable) population data. For these tests, I have found working with them individually to make the most sense, and do not know how I should go about testing that dataframe, or what to look for.
-
-# PREVIOUS WORK BELOW
-
-
-
 
 # Potential tests
 
